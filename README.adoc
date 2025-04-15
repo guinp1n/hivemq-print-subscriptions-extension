@@ -1,0 +1,49 @@
+:hivemq-link: https://www.hivemq.com
+:hivemq-extension-docs: {hivemq-link}/docs/extensions/latest/
+:hivemq-mqtt-toolbox: {hivemq-link}/mqtt-toolbox
+:hivemq-support: {hivemq-link}/support/
+:hivemq-testcontainer: https://github.com/hivemq/hivemq-testcontainer
+:hivemq-mqtt-client: https://github.com/hivemq/hivemq-mqtt-client
+
+== Purpose
+
+This Print subscriptions extension iterates over all the clients and if susbcription count is > 300 then prints those in log file
+
+We strongly recommend to read the {hivemq-extension-docs}[HiveMQ Extension Documentation] to grasp the core concepts of HiveMQ extension development.
+
+== Installation
+
+. Clone this repository into a Java 11 Gradle project.
+. Execute the Gradle task `hivemqExtensionZip` to build the extension.
+. Move the file: `build/hivemq-extension/hivemq-print-subscriptions-extension-4.12.0.zip` to the directory: `HIVEMQ_HOME/extensions`
+. Unzip the file.
+. Start HiveMQ.
+
+== First Steps
+
+Add following code block to your `logback.xml` to create separate log file for this extension,
+
+[source,xml]
+-----------------
+        <appender name="CUSTOM-FILE" class="ch.qos.logback.core.FileAppender">
+           <file>${hivemq.log.folder}/hivemq-custom-extension.log</file>
+           <append>true</append>
+           <encoder>
+               <pattern>%-30(%d %level)- %msg%n%ex</pattern>
+           </encoder>
+        </appender>
+
+        <logger name="com.hivemq.extensions.printsubscriptions" level="INFO" additivity="false">
+           <appender-ref ref="CUSTOM-FILE"/>
+        </logger>
+-----------------
+=== Manual Testing
+
+Connect with an {hivemq-mqtt-toolbox}[MQTT client] of your choice.
+You should see a log message with if there are subscriptions more than 300
+
+
+== License
+
+HiveMQ Hello World Extension is licensed under the `APACHE LICENSE, VERSION 2.0`.
+A copy of the license can be found link:LICENSE[here].
